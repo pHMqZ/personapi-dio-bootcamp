@@ -1,4 +1,4 @@
-package com.pms.dio.dto;
+package com.pms.dio.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

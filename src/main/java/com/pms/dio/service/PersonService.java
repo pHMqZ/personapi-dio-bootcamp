@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.pms.dio.dto.request.PersonDTO;
@@ -16,9 +17,9 @@ import com.pms.dio.repository.PersonRepository;
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PersonService {
 
+	@Autowired
 	private PersonRepository personRepository;
 
 	private final PersonMapper personMapper = PersonMapper.INSTANCE;

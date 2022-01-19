@@ -13,17 +13,15 @@ import com.pms.dio.mapper.PersonMapper;
 import com.pms.dio.model.Person;
 import com.pms.dio.repository.PersonRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PersonService {
 
 	private PersonRepository personRepository;
 
 	private final PersonMapper personMapper = PersonMapper.INSTANCE;
-
-	@Autowired
-	public PersonService(PersonRepository personRepository) {
-		this.personRepository = personRepository;
-	}
 
 	public MessageResponseDTO create(PersonDTO personDTO) {
 		Person person = personMapper.toModel(personDTO);

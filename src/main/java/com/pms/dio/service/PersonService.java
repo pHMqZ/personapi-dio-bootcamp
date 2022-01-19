@@ -17,34 +17,41 @@ import com.pms.dio.repository.PersonRepository;
 @Service
 public class PersonService {
 
-    private PersonRepository personRepository;
+	private PersonRepository personRepository;
 
-    private final PersonMapper personMapper = PersonMapper.INSTANCE;
-    		
-    		
-    @Autowired
-    public PersonService(PersonRepository personRepository) {
-    	this.personRepository = personRepository;
-    }
-	
-		
+	private final PersonMapper personMapper = PersonMapper.INSTANCE;
+
+	@Autowired
+	public PersonService(PersonRepository personRepository) {
+		this.personRepository = personRepository;
+	}
+
 	public MessageResponseDTO create(PersonDTO personDTO) {
 		Person person = personMapper.toModel(personDTO);
 		Person savedPerson = personRepository.save(person);
 		return MessageResponseDTO.builder().message("Created person with Id " + savedPerson.getId()).build();
 	}
 
-	
 	public List<PersonDTO> listAll() {
 		List<Person> people = personRepository.findAll();
-		
+
 		return people.stream().map(personMapper::toDTO).collect(Collectors.toList());
 	}
 
-
 	public PersonDTO findById(Long id) throws PersonNotFoundException {
-		Person person = personRepository.findById(id).orElseThrow(() ->new PersonNotFoundException(id));
+		Person person = verifyIfExists(id);
 		return personMapper.toDTO(person);
 	}
 
+	public void delete(Long id) throws PersonNotFoundException {
+		verifyIfExists(id);
+
+		personRepository.deleteById(id);
+	}
+	
+	private Person verifyIfExists(Long id) throws PersonNotFoundException {
+        return personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
+    }
+	
 }

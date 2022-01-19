@@ -1,7 +1,6 @@
 package com.pms.dio.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +41,11 @@ public class PersonService {
 		Person person = verifyIfExists(id);
 		return personMapper.toDTO(person);
 	}
+	
+	
 
 	public void delete(Long id) throws PersonNotFoundException {
 		verifyIfExists(id);
-
 		personRepository.deleteById(id);
 	}
 	

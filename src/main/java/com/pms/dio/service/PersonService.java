@@ -1,7 +1,6 @@
 package com.pms.dio.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class PersonService {
 	public MessageResponseDTO create(PersonDTO personDTO) {
 		Person person = personMapper.toModel(personDTO);
 		Person savedPerson = personRepository.save(person);
-		return MessageResponseDTO.builder().message("Created person with Id " + savedPerson.getId()).build();
+		return createResponse(savedPerson.getId(), "Created person with ID ");
 	}
 
 	public List<PersonDTO> listAll() {
@@ -42,10 +41,18 @@ public class PersonService {
 		Person person = verifyIfExists(id);
 		return personMapper.toDTO(person);
 	}
+	
+	
+	public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException{
+		verifyIfExists(id);
+		
+		Person personUpdate = personMapper.toModel(personDTO);
+		Person updatedPerson = personRepository.save(personUpdate);
+		return createResponse(updatedPerson.getId(), "Updated person with ID ");
+	}
 
 	public void delete(Long id) throws PersonNotFoundException {
 		verifyIfExists(id);
-
 		personRepository.deleteById(id);
 	}
 	
@@ -54,4 +61,10 @@ public class PersonService {
                 .orElseThrow(() -> new PersonNotFoundException(id));
     }
 	
+	private MessageResponseDTO createResponse(Long id, String message) {
+        return MessageResponseDTO
+                .builder()
+                .message(message + id)
+                .build();
+    }
 }
